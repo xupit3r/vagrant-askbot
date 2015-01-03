@@ -1,0 +1,5 @@
+Puppetfile.lock
+.librarian
+.tmp
+.vagrant
+.DS_Store
