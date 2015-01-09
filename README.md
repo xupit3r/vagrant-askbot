@@ -11,6 +11,7 @@
     ASKBOT_EXTRA_SKINS_DIR = os.path.join(os.path.dirname(__file__), 'askbot/skins')
     STATICFILES_DIRS = (
         ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
+        ('<skin_name>', ASKBOT_EXTRA_SKINS_DIR)),
         ('<skin_name>/media', os.path.join(ASKBOT_EXTRA_SKINS_DIR, '<skin_name>/media'))
     )
 ```
