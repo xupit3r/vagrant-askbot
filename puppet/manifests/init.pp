@@ -9,9 +9,10 @@ class { 'postgresql::server':
   listen_addresses => '*'
 }
 
+# set a postgres rule to allow for local askbout authentication
 postgresql::server::pg_hba_rule { 'allow for local authentication with the askbot user':
   type => 'local',
-  database => 'omain',
+  database => 'askbot',
   user => 'ab',
   auth_method => 'md5',
   order => 001
@@ -45,23 +46,46 @@ python::pip { 'psycopg2' :
 # install askbot from the pip universe
 python::pip { 'askbot' :
   pkgname => 'askbot',
-  ensure => 'present'
+  ensure => '0.7.50'
 }
 
 # setup askbot environment
 exec { 'askbot-site' :
-  command => 'askbot-setup -n /home/vagrant/ab -e 1 -d ab -u ab -p ab -domain askbot.dev',
+  command => 'askbot-setup -n /home/vagrant/ab -e 1 -u ab -p ab -d askbot',
   path => '/usr/local/bin',
   require => Python::Pip['psycopg2', 'askbot']
 }
 
+# make sure that the askbot skins directory exists
 file { '/home/vagrant/ab/askbot/skins' : 
   ensure => 'directory',
   require => Exec['askbot-site']
 }
 
-file { '/home/vagrant/ab/ab-setup.sh' :
+# copy over the setup script
+file { '/usr/local/bin/ab-setup' :
   source => '/vagrant/files/ab-setup.sh',
   mode => '+x',
+  require => Exec['askbot-site']
+}
+
+# copy over a script that can startup the askbot server
+file { '/usr/local/bin/run-askbot' :
+  source => '/vagrant/files/run-askbot.sh',
+  mode => '+x',
+  require => Exec['askbot-site']
+}
+
+# copy over the default settings file
+file { '/home/vagrant/ab/settings.py' :
+  source => '/vagrant/files/settings.py',
+  require => Exec['askbot-site']
+}
+
+# make sure to set sane ownership values for the ab directory
+file { '/home/vagrant/ab' :
+  ensure => 'directory',
+  owner => 'vagrant',
+  group => 'vagrant',
   require => Exec['askbot-site']
 }

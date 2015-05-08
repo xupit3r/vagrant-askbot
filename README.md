@@ -4,14 +4,9 @@
 2. set your skin name (`SKIN_NAME`) to the desired name in the `Vagrantfile`
 3. in this directory type `vagrant up` (this will begin the setup and provisioning of the virtual machine)
 4. after setup and provisioning is complete, log into the machine by typing `vagrant ssh`
-5. navigate to `/home/vagrant/ab` and execute the following command `sudo ./ab-setup.sh`
-6. once the command has completed, open `settings.py` and ensure that following lines are properly set (replace `<skin_name>` with your skin name, i.e. what you set in step 2 above) 
+5. navigate to `/home/vagrant/ab` and execute the following command `ab-setup`
+6. once the command has completed, you can run the server by executing `run-askbot`
 
-```
-    ASKBOT_EXTRA_SKINS_DIR = os.path.join(os.path.dirname(__file__), 'askbot/skins')
-    STATICFILES_DIRS = (
-        ('default/media', os.path.join(ASKBOT_ROOT, 'media')),
-        ('<skin_name>', ASKBOT_EXTRA_SKINS_DIR)),
-        ('<skin_name>/media', os.path.join(ASKBOT_EXTRA_SKINS_DIR, '<skin_name>/media'))
-    )
-```
+# Use
+
+This is expected to be used in conjunction with the development of askbot skins. For an example of a skin structure, see the [AskPGH theme](https://github.com/openpgh/askpgh-theme).

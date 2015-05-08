@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# move into the ab directory (where all this
+# stuff is n'at)
+cd  /home/vagrant/ab
+
 # copy files
 python manage.py collectstatic <<< yes
 
